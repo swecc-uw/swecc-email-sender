@@ -1,5 +1,5 @@
 """
-Data loading, i.e. handling email templates and recipient data.
+Data loading module for handling email templates and recipient data.
 """
 
 import csv
@@ -7,12 +7,11 @@ import json
 from pathlib import Path
 from typing import Dict, List, Union
 
-
 class DataLoader:
     """Class to handle loading and validating email data from files."""
 
     @staticmethod
-    def load_data(filepath: Union[str, Path]) -> List[Dict]:
+    def load_data(filepath: Union[str, Path]) -> List[Dict[str, str]]:
         """
         Load data from either CSV or JSON file.
 
@@ -31,14 +30,19 @@ class DataLoader:
         if not filepath.exists():
             raise FileNotFoundError(f"File not found: {filepath}")
 
+        result: List[Dict[str, str]] = []
+
         if filepath.suffix == '.json':
             with filepath.open('r') as f:
-                return json.load(f)
+                result = json.load(f)
         elif filepath.suffix == '.csv':
             with filepath.open('r') as f:
-                return list(csv.DictReader(f))
+                reader = csv.DictReader(f)
+                result = [{k: str(v) for k, v in row.items()} for row in reader]
         else:
             raise ValueError("Unsupported file format. Use .json or .csv")
+
+        return result
 
     @staticmethod
     def load_template(filepath: Union[str, Path]) -> str:

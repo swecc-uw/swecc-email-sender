@@ -39,7 +39,7 @@ dev = [
     "flake8>=5.0.0",
     "beautifulsoup4>=4.9.0",
     "pre-commit>=3.5.0",
-    "ruff>=0.2.0",
+    "ruff>=0.2.0"
 ]
 
 [project.urls]
@@ -99,6 +99,7 @@ warn_redundant_casts = true
 warn_unused_ignores = true
 warn_no_return = true
 warn_unreachable = true
+disable_error_code = ["import-untyped"]
 
 [tool.pytest.ini_options]
 minversion = "7.0"

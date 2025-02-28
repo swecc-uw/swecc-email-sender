@@ -7,7 +7,7 @@ import json
 import logging
 import os
 from string import Formatter
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 
 from swecc_email_sender.utils.markdown_utils import convert_markdown_to_html
 
@@ -22,12 +22,11 @@ class EmailSender:
         """Initialize EmailSender with optional API key."""
         self.api_key = api_key or os.getenv('SENDGRID_API_KEY')
         if not self.api_key:
-            msg = """No SendGrid API key provided. Set SENDGRID_API_KEY
-environment variable or pass it as an argument."""
+            msg = "No SendGrid API key provided. Set SENDGRID_API_KEY environment variable or pass it as an argument."
             raise ValueError(msg)
 
     @staticmethod
-    def validate_template_keys(template: str, data: dict) -> list[str]:
+    def validate_template_keys(template: str, data: Dict[str, str]) -> List[str]:
         """Validate that all format specifiers in template have matching keys in data."""
         required_keys = {
             fname for _, fname, _, _ in Formatter().parse(template)
@@ -36,10 +35,10 @@ environment variable or pass it as an argument."""
         return [key for key in required_keys if key not in data]
 
     @staticmethod
-    def format_with_fallback(template: str, data: dict, fallback: str = '') -> str:
+    def format_with_fallback(template: str, data: Dict[str, str], fallback: str = '') -> str:
         """Format string with dict data, replacing missing values with fallback."""
-        class DefaultDict(dict):
-            def __missing__(self, _):
+        class DefaultDict(Dict[str, str]):
+            def __missing__(self, _: str) -> str:
                 return fallback
 
         try:
@@ -55,7 +54,7 @@ environment variable or pass it as an argument."""
         content: str,
         from_email: str,
         is_markdown: bool = False,
-        template_data: Optional[Dict] = None
+        template_data: Optional[Dict[str, str]] = None
     ) -> bool:
         """
         Send a single email using SendGrid's API.
@@ -112,5 +111,5 @@ environment variable or pass it as an argument."""
             return False
 
         except Exception as e:
-            logger.error(f"Failed to send email to {to_email}: {e!s}")
+            logger.error(f"Failed to send email to {to_email}: {str(e)}")
             return False

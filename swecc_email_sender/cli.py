@@ -9,6 +9,7 @@ from typing import Optional, Sequence
 
 from swecc_email_sender.core.loader import DataLoader
 from swecc_email_sender.core.sender import EmailSender
+from swecc_email_sender.utils.markdown_utils import convert_markdown_to_html
 
 logging.basicConfig(
     level=logging.INFO,
@@ -95,7 +96,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                 print("Markdown content:")
                 print(preview_content)
                 print("\nConverted HTML:")
-                print(sender.convert_markdown_to_html(preview_content))
+                print(convert_markdown_to_html(preview_content))
             else:
                 print(preview_content)
             return 0
@@ -141,7 +142,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         return 0 if success_count == len(data) else 1
 
     except Exception as e:
-        logger.error(f"Error: {e!s}")
+        logger.error(f"Error: {str(e)}")
         return 1
 
 if __name__ == '__main__':
