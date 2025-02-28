@@ -1,0 +1,126 @@
+[build-system]
+requires = ["hatchling>=1.21.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "swecc-pypi-template"
+version = "0.1.1"
+description = "A template for creating a Python package and publishing it to PyPI"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+keywords = ["template", "pypi", "packaging"]
+authors = [
+    { name = "SWECC Labs", email = "swecc@uw.edu" }
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    # Testing
+    "pytest",
+    "pytest-asyncio",
+
+    # Linting and Type Checking
+    "mypy",
+    "ruff",
+    "black",
+    "types-click",      # type stubs for click
+    "types-PyYAML",     # type stubs for PyYAML (used by mkdocs)
+    "types-Markdown",   # type stubs for markdown
+    "types-requests",   # type stubs for requests
+
+    # Development Tools
+    "pre-commit",
+    "build",
+    "twine",
+
+    # Documentation
+    "mkdocs",
+    "mkdocs-material",
+    "mkdocstrings[python]",
+]
+
+lint = [
+    "pre-commit",
+    "ruff",
+    "black",
+    "mypy",
+]
+
+test = [
+    "pytest",
+    "pytest-asyncio",
+]
+
+docs = [
+    "mkdocs",
+    "mkdocs-material",
+    "mkdocstrings[python]",
+]
+
+[project.scripts]
+swecc-pypi-template = "swecc_pypi_template.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/swecc/swecc-pypi-template"
+Documentation = "https://github.com/swecc/swecc-pypi-template#readme"
+Issues = "https://github.com/swecc/swecc-pypi-template/issues"
+
+[tool.ruff]
+lint.select = ["E", "F", "I", "N", "W", "B", "UP", "PL", "RUF"]
+lint.ignore = []
+line-length = 100
+target-version = "py38"
+fix = true
+unsafe-fixes = false
+
+[tool.ruff.lint.isort]
+known-first-party = ["swecc_pypi_template"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+ignore_missing_imports = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+no_implicit_optional = true
+show_error_codes = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::UserWarning",
+]
+
+[tool.hatch.build]
+exclude = [
+    "tests/*",
+    "venv/*",
+    ".git/*",
+    "docs/*",
+    "*.pyc",
+    "__pycache__/*",
+    ".pytest_cache/*",
+    ".mypy_cache/*",
+    ".ruff_cache/*",
+    "dist/*",
+    "build/*",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["swecc_pypi_template"]
