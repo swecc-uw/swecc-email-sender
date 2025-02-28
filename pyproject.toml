@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "swecc-email-sender"
-version = "1.0.3"
+version = "1.0.4"
 description = "A production-ready email automation library using SendGrid"
 readme = "README.md"
 requires-python = ">=3.8"
