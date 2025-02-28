@@ -21,14 +21,19 @@ class EmailSender:
 
     def __init__(self, api_key: Optional[str] = None):
         """Initialize EmailSender with optional API key."""
-        if api_key is not None and len(api_key) > 0 and os.getenv("SENDGRID_API_KEY") is not None:
-            print("defaulting to API key provided through SENDGRID_API_KEY enviornment variable")
+        env_key = os.getenv("SENDGRID_API_KEY")
+        logger.debug(f"Environment API key present: {bool(env_key)}")
+        logger.debug(f"Passed API key present: {bool(api_key)}")
 
-        self.api_key = os.getenv("SENDGRID_API_KEY") or api_key
-
+        self.api_key = api_key or env_key
         if not self.api_key:
-            msg = """No SendGrid API key provided. Set SENDGRID_API_KEY
-environment variable or pass it as an argument."""
+            msg = """
+            No SendGrid API key provided. Set SENDGRID_API_KEY environment variable
+            or pass it as an argument.
+            """
+            logger.error(
+                "API key error: Neither passed key nor environment variable SENDGRID_API_KEY is set"
+            )
             raise ValueError(msg)
 
     @staticmethod

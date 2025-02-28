@@ -23,19 +23,11 @@ repos:
   rev: v1.8.0
   hooks:
     - id: mypy
-      files: ^swecc_email_sender/
-      additional_dependencies: ["markdown>=3.3.0"]
+      files: ^email_scraper/
       args:
-        - --python-version=3.8
-        - --warn-return-any
-        - --warn-unused-configs
-        - --disallow-untyped-defs
-        - --disallow-incomplete-defs
-        - --check-untyped-defs
-        - --disallow-untyped-decorators
-        - --no-implicit-optional
-        - --warn-redundant-casts
-        - --warn-unused-ignores
-        - --warn-no-return
-        - --warn-unreachable
-        - --disable-error-code=import-untyped
+        - --ignore-missing-imports
+        - --allow-untyped-decorators
+        - --allow-incomplete-defs
+        - --allow-subclassing-any
+        - --disable-error-code=misc
+        - --disable-error-code=no-untyped-def

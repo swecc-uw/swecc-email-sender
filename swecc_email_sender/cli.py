@@ -4,6 +4,7 @@ Command-line interface for SWECC Email Sender.
 
 import argparse
 import logging
+import os
 import sys
 from typing import Optional, Sequence
 
@@ -11,6 +12,7 @@ from swecc_email_sender.core.loader import DataLoader
 from swecc_email_sender.core.sender import EmailSender
 from swecc_email_sender.utils.markdown_utils import convert_markdown_to_html
 
+# Set up root logger
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
@@ -27,6 +29,12 @@ def create_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--api-key", type=str, help="SendGrid API key (defaults to SENDGRID_API_KEY env var)"
+    )
+    parser.add_argument(
+        "--verbose",
+        "-v",
+        action="store_true",
+        help="Enable verbose logging (includes debug messages)",
     )
 
     content_group = parser.add_mutually_exclusive_group(required=True)
@@ -49,7 +57,6 @@ def create_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--preview", action="store_true", help="Preview the first email content without sending"
     )
-    parser.add_argument("--verbose", action="store_true", help="Enable verbose logging")
 
     return parser
 
@@ -67,8 +74,11 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     parser = create_parser()
     args = parser.parse_args(argv)
 
+    # Configure logging based on verbose flag
     if args.verbose:
-        logger.setLevel(logging.DEBUG)
+        logging.getLogger().setLevel(logging.DEBUG)
+        logger.debug("Verbose logging enabled")
+        logger.debug(f"Current environment variables: {list(os.environ.keys())}")
 
     try:
         sender = EmailSender(args.api_key)
