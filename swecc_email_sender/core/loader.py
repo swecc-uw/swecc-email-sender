@@ -33,11 +33,11 @@ class DataLoader:
 
         result: List[Dict[str, str]] = []
 
-        if filepath.suffix == '.json':
-            with filepath.open('r') as f:
+        if filepath.suffix == ".json":
+            with filepath.open("r") as f:
                 result = json.load(f)
-        elif filepath.suffix == '.csv':
-            with filepath.open('r') as f:
+        elif filepath.suffix == ".csv":
+            with filepath.open("r") as f:
                 reader = csv.DictReader(f)
                 result = [{k: str(v) for k, v in row.items()} for row in reader]
         else:

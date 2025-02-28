@@ -15,15 +15,16 @@ logger = logging.getLogger(__name__)
 
 SENDGRID_SUCCESS_STATUS = 202
 
+
 class EmailSender:
     """Class to handle email sending operations using SendGrid API."""
 
     def __init__(self, api_key: Optional[str] = None):
         """Initialize EmailSender with optional API key."""
-        if api_key != None and len(api_key) > 0 and os.getenv('SENDGRID_API_KEY') is not None:
-          print("defaulting to API key provided through SENDGRID_API_KEY enviornment variable")
+        if api_key is not None and len(api_key) > 0 and os.getenv("SENDGRID_API_KEY") is not None:
+            print("defaulting to API key provided through SENDGRID_API_KEY enviornment variable")
 
-        self.api_key = os.getenv('SENDGRID_API_KEY') or api_key
+        self.api_key = os.getenv("SENDGRID_API_KEY") or api_key
 
         if not self.api_key:
             msg = """No SendGrid API key provided. Set SENDGRID_API_KEY
@@ -34,14 +35,14 @@ environment variable or pass it as an argument."""
     def validate_template_keys(template: str, data: Dict[str, str]) -> List[str]:
         """Validate that all format specifiers in template have matching keys in data."""
         required_keys = {
-            fname for _, fname, _, _ in Formatter().parse(template)
-            if fname is not None
+            fname for _, fname, _, _ in Formatter().parse(template) if fname is not None
         }
         return [key for key in required_keys if key not in data]
 
     @staticmethod
-    def format_with_fallback(template: str, data: Dict[str, str], fallback: str = '') -> str:
+    def format_with_fallback(template: str, data: Dict[str, str], fallback: str = "") -> str:
         """Format string with dict data, replacing missing values with fallback."""
+
         class DefaultDict(Dict[str, str]):
             def __missing__(self, _: str) -> str:
                 return fallback
@@ -59,7 +60,7 @@ environment variable or pass it as an argument."""
         content: str,
         from_email: str,
         is_markdown: bool = False,
-        template_data: Optional[Dict[str, str]] = None
+        template_data: Optional[Dict[str, str]] = None,
     ) -> bool:
         """
         Send a single email using SendGrid's API.
@@ -87,22 +88,14 @@ environment variable or pass it as an argument."""
             "personalizations": [{"to": [{"email": to_email}]}],
             "from": {"email": from_email},
             "subject": subject,
-            "content": [{"type": content_type, "value": content}]
+            "content": [{"type": content_type, "value": content}],
         }
 
-        headers = {
-            "Authorization": f"Bearer {self.api_key}",
-            "Content-Type": "application/json"
-        }
+        headers = {"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"}
 
         try:
             conn = http.client.HTTPSConnection("api.sendgrid.com")
-            conn.request(
-                "POST",
-                "/v3/mail/send",
-                body=json.dumps(payload),
-                headers=headers
-            )
+            conn.request("POST", "/v3/mail/send", body=json.dumps(payload), headers=headers)
 
             response = conn.getresponse()
             conn.close()

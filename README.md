@@ -151,7 +151,7 @@ The project uses:
 To run all checks:
 
 ```bash
-black .
+ruff --fix
 isort .
 mypy swecc_email_sender
 flake8 swecc_email_sender

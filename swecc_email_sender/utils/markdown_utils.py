@@ -18,13 +18,9 @@ def convert_markdown_to_html(content: str, css_class: Optional[str] = None) -> s
     Returns:
         HTML string with default styling
     """
-    html = markdown.markdown(content, extensions=[
-        'fenced_code',
-        'tables',
-        'attr_list'
-    ])
+    html = markdown.markdown(content, extensions=["fenced_code", "tables", "attr_list"])
 
-    class_attr = f' class="{css_class}"' if css_class else ''
+    class_attr = f' class="{css_class}"' if css_class else ""
     font_family = """-apple-system, BlinkMacSystemFont, 'Segoe UI',
 Roboto, 'Helvetica Neue', Arial, sans-serif"""
     return f"""
