@@ -39,7 +39,7 @@ class DataLoader:
         elif filepath.suffix == ".csv":
             with filepath.open("r") as f:
                 reader = csv.DictReader(f)
-                result = [{k: str(v) for k, v in row.items()} for row in reader]
+                result = [{k.strip(): str(v).strip() for k, v in row.items()} for row in reader]
         else:
             raise ValueError("Unsupported file format. Use .json or .csv")
 
