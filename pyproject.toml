@@ -43,10 +43,10 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/swecc/swecc-email-sender"
-Documentation = "https://github.com/swecc/swecc-email-sender#readme"
-Repository = "https://github.com/swecc/swecc-email-sender.git"
-"Bug Tracker" = "https://github.com/swecc/swecc-email-sender/issues"
+Homepage = "https://github.com/swecc-uw/swecc-email-sender"
+Documentation = "https://github.com/swecc-uw-uw/swecc-email-sender#readme"
+Repository = "https://github.com/swecc-uw-uw/swecc-email-sender.git"
+"Bug Tracker" = "https://github.com/swecc-uw/swecc-email-sender/issues"
 
 [project.scripts]
 swecc-email-sender = "swecc_email_sender.cli:main"
