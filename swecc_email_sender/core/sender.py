@@ -20,7 +20,11 @@ class EmailSender:
 
     def __init__(self, api_key: Optional[str] = None):
         """Initialize EmailSender with optional API key."""
-        self.api_key = api_key or os.getenv('SENDGRID_API_KEY')
+        if api_key != None and len(api_key) > 0 and os.getenv('SENDGRID_API_KEY') is not None:
+          print("defaulting to API key provided through SENDGRID_API_KEY enviornment variable")
+
+        self.api_key = os.getenv('SENDGRID_API_KEY') or api_key
+
         if not self.api_key:
             msg = """No SendGrid API key provided. Set SENDGRID_API_KEY
 environment variable or pass it as an argument."""
