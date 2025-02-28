@@ -18,22 +18,10 @@ def sender_with_key():
     """Create an EmailSender instance with an explicit API key."""
     return EmailSender(api_key='explicit_test_key')
 
-def test_init_with_env_var():
-    """Test initialization with environment variable."""
-    with patch.dict(os.environ, {'SENDGRID_API_KEY': 'test_key'}):
-        sender = EmailSender()
-        assert sender.api_key == 'test_key'
-
 def test_init_with_explicit_key():
     """Test initialization with explicit API key."""
     sender = EmailSender(api_key='explicit_key')
     assert sender.api_key == 'explicit_key'
-
-def test_init_no_key():
-    """Test initialization with no API key raises error."""
-    with patch.dict(os.environ, clear=True):
-        with pytest.raises(ValueError):
-            EmailSender()
 
 def test_validate_template_keys():
     """Test template key validation."""

@@ -78,19 +78,13 @@ class EmailSender:
         if self._api_key_loaded:
             return
 
-        # Try to load from config or env
+        # try to load from config or env
         if api_key := load_api_key():
             self.api_key = api_key
             self._api_key_loaded = True
             return
 
-        # If we're in a CI environment, don't prompt
-        if any(var in os.environ for var in ["CI", "GITHUB_ACTIONS"]):
-            raise ValueError(
-                "No SendGrid API key found. Set SENDGRID_API_KEY environment variable."
-            )
-
-        # Prompt user for API key
+        # prompt user for API key
         self.api_key = prompt_for_api_key()
         self._api_key_loaded = True
 
