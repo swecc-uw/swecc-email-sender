@@ -16,7 +16,7 @@ from swecc_email_sender.utils.markdown_utils import convert_markdown_to_html
 logger = logging.getLogger(__name__)
 
 SENDGRID_SUCCESS_STATUS = 202
-CONFIG_DIR = Path.home() / ".swecc"
+CONFIG_DIR = Path.home() / ".config" / "swecc-email-sender"
 CONFIG_FILE = CONFIG_DIR / "email_sender_config.json"
 
 
