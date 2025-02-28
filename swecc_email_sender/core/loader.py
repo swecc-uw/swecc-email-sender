@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 from typing import Dict, List, Union
 
+
 class DataLoader:
     """Class to handle loading and validating email data from files."""
 

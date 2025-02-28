@@ -22,7 +22,8 @@ class EmailSender:
         """Initialize EmailSender with optional API key."""
         self.api_key = api_key or os.getenv('SENDGRID_API_KEY')
         if not self.api_key:
-            msg = "No SendGrid API key provided. Set SENDGRID_API_KEY environment variable or pass it as an argument."
+            msg = """No SendGrid API key provided. Set SENDGRID_API_KEY
+environment variable or pass it as an argument."""
             raise ValueError(msg)
 
     @staticmethod
@@ -111,5 +112,5 @@ class EmailSender:
             return False
 
         except Exception as e:
-            logger.error(f"Failed to send email to {to_email}: {str(e)}")
+            logger.error(f"Failed to send email to {to_email}: {e!s}")
             return False

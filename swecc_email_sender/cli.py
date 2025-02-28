@@ -142,7 +142,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         return 0 if success_count == len(data) else 1
 
     except Exception as e:
-        logger.error(f"Error: {str(e)}")
+        logger.error(f"Error: {e!s}")
         return 1
 
 if __name__ == '__main__':
