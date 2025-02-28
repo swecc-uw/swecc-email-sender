@@ -3,7 +3,7 @@ requires = ["hatchling>=1.21.0"]
 build-backend = "hatchling.build"
 
 [project]
-name = "swecc-pypi-template"
+name = "swecc-email-sender"
 version = "0.1.1"
 description = "A template for creating a Python package and publishing it to PyPI"
 readme = "README.md"
@@ -69,12 +69,12 @@ docs = [
 ]
 
 [project.scripts]
-swecc-pypi-template = "swecc_pypi_template.cli:main"
+swecc-email-sender = "swecc_email_sender.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/swecc/swecc-pypi-template"
-Documentation = "https://github.com/swecc/swecc-pypi-template#readme"
-Issues = "https://github.com/swecc/swecc-pypi-template/issues"
+Homepage = "https://github.com/swecc-uw/swecc-email-sender"
+Documentation = "https://github.com/swecc-uw/swecc-email-sender#readme"
+Issues = "https://github.com/swecc-uw/swecc-email-sender/issues"
 
 [tool.ruff]
 lint.select = ["E", "F", "I", "N", "W", "B", "UP", "PL", "RUF"]
@@ -85,7 +85,7 @@ fix = true
 unsafe-fixes = false
 
 [tool.ruff.lint.isort]
-known-first-party = ["swecc_pypi_template"]
+known-first-party = ["swecc_email_sender"]
 
 [tool.mypy]
 python_version = "3.10"
@@ -123,4 +123,4 @@ exclude = [
 ]
 
 [tool.hatch.build.targets.wheel]
-packages = ["swecc_pypi_template"]
+packages = ["swecc_email_sender"]

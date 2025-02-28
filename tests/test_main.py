@@ -1,5 +1,5 @@
 import pytest
-from swecc_pypi_template.main import hello_world
+from swecc_email_sender.main import hello_world
 
 
 def test_hello_world_default():

@@ -29,11 +29,11 @@ jobs:
 
     - name: Lint with ruff
       run: |
-        ruff check swecc_pypi_template
+        ruff check swecc_email_sender
 
     - name: Type check with mypy
       run: |
-        mypy swecc_pypi_template
+        mypy swecc_email_sender
 
     - name: Test with pytest
       run: |
