@@ -2,10 +2,12 @@
 Email sender module using SendGrid API.
 """
 
+import getpass
 import http.client
 import json
 import logging
 import os
+from pathlib import Path
 from string import Formatter
 from typing import Dict, List, Optional
 
@@ -14,6 +16,53 @@ from swecc_email_sender.utils.markdown_utils import convert_markdown_to_html
 logger = logging.getLogger(__name__)
 
 SENDGRID_SUCCESS_STATUS = 202
+CONFIG_DIR = Path.home() / ".swecc"
+CONFIG_FILE = CONFIG_DIR / "email_sender_config.json"
+
+
+def save_api_key(api_key: str) -> None:
+    """Save API key to config file."""
+    CONFIG_DIR.mkdir(parents=True, exist_ok=True)
+    CONFIG_FILE.write_text(json.dumps({"SENDGRID_API_KEY": api_key}))
+    CONFIG_FILE.chmod(0o600)  # Read/write for owner only
+
+
+def load_api_key() -> Optional[str]:
+    """Load API key from config file or environment."""
+    # First check environment
+    if api_key := os.getenv("SENDGRID_API_KEY"):
+        return api_key
+
+    # Then check config file
+    if CONFIG_FILE.exists():
+        try:
+            config = json.loads(CONFIG_FILE.read_text())
+            return config.get("SENDGRID_API_KEY")
+        except (json.JSONDecodeError, OSError):
+            return None
+
+    return None
+
+
+def prompt_for_api_key() -> str:
+    """Prompt user for SendGrid API key."""
+    print(
+        "\nSendGrid API key not found. You can get one from https://app.sendgrid.com/settings/api_keys"
+    )
+    api_key = getpass.getpass("Enter your SendGrid API key (starts with 'SG.'): ")
+
+    # Ask if they want to save it
+    save = input("Would you like to save this API key for future use? [Y/n] ").lower()
+    if save in ["", "y", "yes"]:
+        save_api_key(api_key)
+        print(f"API key saved to {CONFIG_FILE}")
+    else:
+        print(
+            """API key will not be saved. Set SENDGRID_API_KEY environment
+            variable to skip this prompt."""
+        )
+
+    return api_key
 
 
 class EmailSender:
@@ -21,20 +70,29 @@ class EmailSender:
 
     def __init__(self, api_key: Optional[str] = None):
         """Initialize EmailSender with optional API key."""
-        env_key = os.getenv("SENDGRID_API_KEY")
-        logger.debug(f"Environment API key present: {bool(env_key)}")
-        logger.debug(f"Passed API key present: {bool(api_key)}")
+        self.api_key = api_key
+        self._api_key_loaded = bool(api_key)
 
-        self.api_key = api_key or env_key
-        if not self.api_key:
-            msg = """
-            No SendGrid API key provided. Set SENDGRID_API_KEY environment variable
-            or pass it as an argument.
-            """
-            logger.error(
-                "API key error: Neither passed key nor environment variable SENDGRID_API_KEY is set"
+    def _ensure_api_key(self) -> None:
+        """Ensure API key is available, prompting user if necessary."""
+        if self._api_key_loaded:
+            return
+
+        # Try to load from config or env
+        if api_key := load_api_key():
+            self.api_key = api_key
+            self._api_key_loaded = True
+            return
+
+        # If we're in a CI environment, don't prompt
+        if any(var in os.environ for var in ["CI", "GITHUB_ACTIONS"]):
+            raise ValueError(
+                "No SendGrid API key found. Set SENDGRID_API_KEY environment variable."
             )
-            raise ValueError(msg)
+
+        # Prompt user for API key
+        self.api_key = prompt_for_api_key()
+        self._api_key_loaded = True
 
     @staticmethod
     def validate_template_keys(template: str, data: Dict[str, str]) -> List[str]:
@@ -81,6 +139,8 @@ class EmailSender:
         Returns:
             bool: True if email was sent successfully, False otherwise
         """
+        self._ensure_api_key()
+
         if template_data:
             content = self.format_with_fallback(content, template_data)
             subject = self.format_with_fallback(subject, template_data)
