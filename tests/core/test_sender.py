@@ -9,14 +9,8 @@ from swecc_email_sender.core.sender import EmailSender
 
 @pytest.fixture
 def sender():
-    """Create an EmailSender instance with a mock API key."""
-    with patch.dict(os.environ, {'SENDGRID_API_KEY': 'test_key'}):
-        return EmailSender()
-
-@pytest.fixture
-def sender_with_key():
-    """Create an EmailSender instance with an explicit API key."""
-    return EmailSender(api_key='explicit_test_key')
+    """Create an EmailSender instance with a test API key."""
+    return EmailSender(api_key='test_key')
 
 def test_init_with_explicit_key():
     """Test initialization with explicit API key."""
