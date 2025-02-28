@@ -36,15 +36,15 @@ dev = [
     "black>=22.0.0",
     "isort>=5.0.0",
     "mypy>=1.0.0",
-    "pre-commit",
     "flake8>=5.0.0",
+    "beautifulsoup4>=4.9.0",
 ]
 
 [project.urls]
-Homepage = "https://github.com/swecc-uw/swecc-email-sender"
-Documentation = "https://github.com/swecc-uw/swecc-email-sender#readme"
-Repository = "https://github.com/swecc-uw/swecc-email-sender.git"
-"Bug Tracker" = "https://github.com/swecc-uw/swecc-email-sender/issues"
+Homepage = "https://github.com/swecc/swecc-email-sender"
+Documentation = "https://github.com/swecc/swecc-email-sender#readme"
+Repository = "https://github.com/swecc/swecc-email-sender.git"
+"Bug Tracker" = "https://github.com/swecc/swecc-email-sender/issues"
 
 [project.scripts]
 swecc-email = "swecc_email_sender.cli:main"
@@ -82,7 +82,7 @@ warn_unreachable = true
 
 [tool.pytest.ini_options]
 minversion = "7.0"
-addopts = "-ra -q --cov=swecc_email_sender"
+addopts = "-ra -q"
 testpaths = [
     "tests",
 ]
