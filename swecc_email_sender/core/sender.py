@@ -37,7 +37,7 @@ def load_api_key() -> Optional[str]:
     if CONFIG_FILE.exists():
         try:
             config = json.loads(CONFIG_FILE.read_text())
-            return config.get("SENDGRID_API_KEY")
+            return str(config.get("SENDGRID_API_KEY"))
         except (json.JSONDecodeError, OSError):
             return None
 
