@@ -2,10 +2,11 @@
 Data loading, i.e. handling email templates and recipient data.
 """
 
-import json
 import csv
+import json
 from pathlib import Path
 from typing import Dict, List, Union
+
 
 class DataLoader:
     """Class to handle loading and validating email data from files."""

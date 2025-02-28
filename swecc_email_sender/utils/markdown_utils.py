@@ -3,8 +3,9 @@ Markdown processing utilities for email content.
 """
 
 from typing import Optional
+
 import markdown
-from markdown.extensions import fenced_code, tables, attr_list
+
 
 def convert_markdown_to_html(content: str, css_class: Optional[str] = None) -> str:
     """
@@ -24,8 +25,10 @@ def convert_markdown_to_html(content: str, css_class: Optional[str] = None) -> s
     ])
 
     class_attr = f' class="{css_class}"' if css_class else ''
+    font_family = """-apple-system, BlinkMacSystemFont, 'Segoe UI',
+Roboto, 'Helvetica Neue', Arial, sans-serif"""
     return f"""
-    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;"{class_attr}>
+    <div style="font-family: {font_family};"{class_attr}>
         {html}
     </div>
     """

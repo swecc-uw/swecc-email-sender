@@ -2,16 +2,18 @@
 Email sender module using SendGrid API.
 """
 
-import json
 import http.client
-import os
+import json
 import logging
-from typing import Dict, Optional
+import os
 from string import Formatter
+from typing import Dict, Optional
 
 from swecc_email_sender.utils.markdown_utils import convert_markdown_to_html
 
 logger = logging.getLogger(__name__)
+
+SENDGRID_SUCCESS_STATUS = 202
 
 class EmailSender:
     """Class to handle email sending operations using SendGrid API."""
@@ -20,7 +22,9 @@ class EmailSender:
         """Initialize EmailSender with optional API key."""
         self.api_key = api_key or os.getenv('SENDGRID_API_KEY')
         if not self.api_key:
-            raise ValueError("No SendGrid API key provided. Set SENDGRID_API_KEY environment variable or pass it as an argument.")
+            msg = """No SendGrid API key provided. Set SENDGRID_API_KEY
+environment variable or pass it as an argument."""
+            raise ValueError(msg)
 
     @staticmethod
     def validate_template_keys(template: str, data: dict) -> list[str]:
@@ -99,7 +103,7 @@ class EmailSender:
             response = conn.getresponse()
             conn.close()
 
-            if response.status == 202:
+            if response.status == SENDGRID_SUCCESS_STATUS:
                 logger.info(f"Email sent successfully to {to_email}")
                 return True
 
@@ -108,5 +112,5 @@ class EmailSender:
             return False
 
         except Exception as e:
-            logger.error(f"Failed to send email to {to_email}: {str(e)}")
+            logger.error(f"Failed to send email to {to_email}: {e!s}")
             return False

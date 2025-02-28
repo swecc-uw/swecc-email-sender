@@ -2,8 +2,8 @@
 SWECC Email Sender - An email automation library using SendGrid.
 """
 
-from swecc_email_sender.core.sender import EmailSender
 from swecc_email_sender.core.loader import DataLoader
+from swecc_email_sender.core.sender import EmailSender
 
 __version__ = "1.0.0"
-__all__ = ["EmailSender", "DataLoader"]
+__all__ = ["DataLoader", "EmailSender"]

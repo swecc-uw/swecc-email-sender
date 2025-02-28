@@ -2,13 +2,13 @@
 Command-line interface for SWECC Email Sender.
 """
 
-import sys
 import argparse
 import logging
+import sys
 from typing import Optional, Sequence
 
-from swecc_email_sender.core.sender import EmailSender
 from swecc_email_sender.core.loader import DataLoader
+from swecc_email_sender.core.sender import EmailSender
 
 logging.basicConfig(
     level=logging.INFO,
@@ -108,7 +108,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                 if missing_keys:
                     has_errors = True
                     logger.error(
-                        f"Missing keys for {item.get('to_email', 'unknown recipient')}: "
+                        f"Missing keys for {item.get('to_email', 'unknown')}: "
                         f"{', '.join(missing_keys)}"
                     )
                 if args.subject:
@@ -116,7 +116,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                     if missing_subject_keys:
                         has_errors = True
                         logger.error(
-                            f"Missing subject keys for {item.get('to_email', 'unknown recipient')}: "
+                            f"Missing subject keys for {item.get('to_email', 'unknown')}: "
                             f"{', '.join(missing_subject_keys)}"
                         )
             return 1 if has_errors else 0
@@ -141,7 +141,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         return 0 if success_count == len(data) else 1
 
     except Exception as e:
-        logger.error(f"Error: {str(e)}")
+        logger.error(f"Error: {e!s}")
         return 1
 
 if __name__ == '__main__':
