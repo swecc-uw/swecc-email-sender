@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling>=1.0.0"]
+requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
@@ -50,10 +50,9 @@ Repository = "https://github.com/swecc-uw-uw/swecc-email-sender.git"
 
 [project.scripts]
 swecc-email-sender = "swecc_email_sender.cli:main"
-swecc-email-sender-setup = "scripts.setup_env:setup_environment"
 
 [tool.hatch.build.targets.wheel]
-packages = ["swecc_email_sender", "scripts"]
+packages = ["swecc_email_sender"]
 
 [tool.black]
 line-length = 100
@@ -108,6 +107,3 @@ addopts = "-ra -q"
 testpaths = [
     "tests",
 ]
-
-[tool.hatch.build.hooks.custom]
-path = "scripts/post_install.py"
