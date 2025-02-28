@@ -49,7 +49,7 @@ Repository = "https://github.com/swecc/swecc-email-sender.git"
 "Bug Tracker" = "https://github.com/swecc/swecc-email-sender/issues"
 
 [project.scripts]
-swecc-email = "swecc_email_sender.cli:main"
+swecc-email-sender = "swecc_email_sender.cli:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["swecc_email_sender"]

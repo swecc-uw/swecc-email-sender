@@ -75,19 +75,19 @@ The package includes a command-line interface for easy use:
 
 ```bash
 # Single email
-swecc-email --from sender@example.com --to recipient@example.com --subject "Hello" --content "Test email"
+swecc-email-sender --from sender@example.com --to recipient@example.com --subject "Hello" --content "Test email"
 
 # Markdown email
-swecc-email --from sender@example.com --to recipient@example.com --subject "Hello" --content "# Hello" --markdown
+swecc-email-sender --from sender@example.com --to recipient@example.com --subject "Hello" --content "# Hello" --markdown
 
 # Template with CSV data
-swecc-email --from sender@example.com --src recipients.csv --subject "Hello {name}" --template email.md
+swecc-email-sender --from sender@example.com --src recipients.csv --subject "Hello {name}" --template email.md
 
 # Preview first email
-swecc-email --from sender@example.com --src data.json --subject "Hello" --template email.md --preview
+swecc-email-sender --from sender@example.com --src data.json --subject "Hello" --template email.md --preview
 
 # Validate templates
-swecc-email --from sender@example.com --src data.json --subject "Hello {name}" --template email.md --validate
+swecc-email-sender --from sender@example.com --src data.json --subject "Hello {name}" --template email.md --validate
 ```
 
 ### Data File Formats
