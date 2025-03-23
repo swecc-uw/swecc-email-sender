@@ -66,6 +66,7 @@ def create_parser() -> argparse.ArgumentParser:
 
 
 def validate_args(args: argparse.Namespace) -> None:
+    # validate required arguments
     if not args.from_email:
         raise ValueError("--from is required for sending or previewing emails")
     if not args.content and not args.template:
