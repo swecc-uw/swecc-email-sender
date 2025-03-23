@@ -9,6 +9,7 @@ An email automation library using SendGrid API. Supports both single and batch e
 - Template substitution support
 - CSV and JSON data source support
 - Preview and validation modes
+- Web interface for previewing emails
 
 ## Installation
 
@@ -88,6 +89,9 @@ swecc-email-sender --from sender@example.com --src data.json --subject "Hello" -
 
 # Validate templates
 swecc-email-sender --from sender@example.com --src data.json --subject "Hello {name}" --template email.md --validate
+
+# Start web interface
+swecc-email-sender --from sender@example.com --serve
 ```
 
 ### Data File Formats
@@ -115,6 +119,19 @@ customer2@example.com,Jane Smith,12346,456 Oak Ave
     "address": "456 Oak Ave"
   }
 ]
+```
+
+## Web Interface
+
+```bash
+# Basic usage
+swecc-email-sender --from sender@example.com --serve
+
+# With template and data
+swecc-email-sender --from sender@example.com --template email.md --src data.csv --serve
+
+# Custom host and port
+swecc-email-sender --from sender@example.com --serve --host 0.0.0.0 --port 8080
 ```
 
 ## Development

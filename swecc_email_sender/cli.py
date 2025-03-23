@@ -24,32 +24,36 @@ def create_parser() -> argparse.ArgumentParser:
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
-    parser.add_argument(
-        "--from", dest="from_email", type=str, required=True, help="Sender email address"
-    )
-    parser.add_argument(
+    parent_parser = argparse.ArgumentParser(add_help=False)
+    parent_parser.add_argument(
         "--api-key", type=str, help="SendGrid API key (defaults to SENDGRID_API_KEY env var)"
     )
-    parser.add_argument(
+    parent_parser.add_argument(
         "--verbose",
         "-v",
         action="store_true",
         help="Enable verbose logging (includes debug messages)",
     )
 
-    content_group = parser.add_mutually_exclusive_group(required=True)
+    parser.add_argument("--serve", action="store_true", help="Serve the email sender web interface")
+    parser.add_argument("--host", type=str, default="localhost", help="Host for the web interface")
+    parser.add_argument("--port", type=int, default=8000, help="Port for the web interface")
+
+    parser.add_argument("--from", dest="from_email", type=str, help="Sender email address")
+
+    content_group = parser.add_mutually_exclusive_group()
     content_group.add_argument("--content", type=str, help="Direct email content")
     content_group.add_argument(
         "--template", type=str, help="Path to template file for email content"
     )
 
-    recipient_group = parser.add_mutually_exclusive_group(required=True)
+    recipient_group = parser.add_mutually_exclusive_group()
     recipient_group.add_argument("--to", type=str, help="Single recipient email address")
     recipient_group.add_argument(
         "--src", type=str, help="Source file path (CSV or JSON) for batch sending"
     )
 
-    parser.add_argument("--subject", type=str, required=True, help="Email subject")
+    parser.add_argument("--subject", type=str, help="Email subject")
     parser.add_argument("--markdown", action="store_true", help="Treat content as Markdown")
     parser.add_argument(
         "--validate", action="store_true", help="Validate templates without sending"
@@ -59,6 +63,18 @@ def create_parser() -> argparse.ArgumentParser:
     )
 
     return parser
+
+
+def validate_args(args: argparse.Namespace) -> None:
+    # validate required arguments
+    if not args.from_email:
+        raise ValueError("--from is required for sending or previewing emails")
+    if not args.content and not args.template:
+        raise ValueError("either --content or --template is required")
+    if not args.to and not args.src:
+        raise ValueError("either --to or --src is required")
+    if not args.subject:
+        raise ValueError("--subject is required")
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
@@ -74,6 +90,12 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     parser = create_parser()
     args = parser.parse_args(argv)
 
+    if args.serve:
+        logger.info("Starting email sender web interface...")
+        from swecc_email_sender.server.main import main as server_main
+
+        return server_main(args)
+
     # Configure logging based on verbose flag
     if args.verbose:
         logging.getLogger().setLevel(logging.DEBUG)
@@ -81,6 +103,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         logger.debug(f"Current environment variables: {list(os.environ.keys())}")
 
     try:
+        validate_args(args)
+
         sender = EmailSender(args.api_key)
         content = DataLoader.load_template(args.template) if args.template else args.content
 
